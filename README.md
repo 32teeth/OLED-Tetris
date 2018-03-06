@@ -9,13 +9,13 @@ C - Move Right
 
 ### Start
 
-<img src="images/001.png">
+<img src="images/001.jpg">
 
 ### Playing
 
-<img src="images/002.png">
-<img src="images/003.png">
+<img src="images/002.jpg">
+<img src="images/003.jpg">
 
 ### Over
 
-<img src="images/004.png">
+<img src="images/004.jpg">
