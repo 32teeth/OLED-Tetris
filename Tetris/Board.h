@@ -29,16 +29,16 @@ void board_border() {
 void board_score() {
   display.fillRect(0, 10, 32, 11, BLACK);
   display.drawRect(0, 10, 32, 11, WHITE);
-  display.setCursor(3,17);
-  //display.print(getPoints());
+  display.setCursor(3, 17);
+  display.print(getPoints());
 }
 
 /*
  *
  */
 void board(String type) {
-  if(type.equals("title")){board_title();}
-  if(type.equals("next")){board_next();}
-  if(type.equals("border")){board_border();}
-  if(type.equals("score")){board_score();}
+  if (type.equals("title")) { board_title(); }
+  if (type.equals("next")) { board_next(); }
+  if (type.equals("border")) { board_border(); }
+  if (type.equals("score")) { board_score(); }
 }

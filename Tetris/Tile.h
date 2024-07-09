@@ -57,11 +57,12 @@ void rotate_tile() {
  *
  */
 void move_tile(int dir) {
+void move_tile(int dir) {
   clear_tile();
   ACTIVE.x += dir;
-  Serial.println(ACTIVE.x);
-  if(ACTIVE.x >= (COLUMNS - 4) ){ACTIVE.x = COLUMNS - 4;}
-  if(ACTIVE.x <= 1 ){ACTIVE.x = 1;}
+  if (ACTIVE.x >= (COLUMNS - 4)) { ACTIVE.x = COLUMNS - 4; }
+  if (ACTIVE.x <= 1) { ACTIVE.x = 1; }
+  display_tile();
 }
 
 /*
@@ -77,7 +78,7 @@ void add_tile() {
  *
  */
 bool tile_hit_bottom() {
-  return ((ACTIVE.y) > ROWS-5) ? true : false;
+  return ((ACTIVE.y) > ROWS - 5) ? true : false;
 }
 
 /*
@@ -119,13 +120,13 @@ bool tile_hit_collision() {
  *
  */
 void drop_tile() {
-  const byte shape[4] = {shapes[current][rotation][0],shapes[current][rotation][1],shapes[current][rotation][2],shapes[current][rotation][3]};
+  static const byte shape[4][4] = {
+    shapes[current][rotation][0], shapes[current][rotation][1],
+    shapes[current][rotation][2], shapes[current][rotation][3]
+  };
 
-  if(ACTIVE.y >= 0)
-  {
+  if (ACTIVE.y >= 0) {
     clear_tile();
-
-    delay(100);
 
     for (byte i = 0; i < 4; i++) {
       for (short j = 3, d = 0; j != -1; j--, d++) {
@@ -135,9 +136,9 @@ void drop_tile() {
       }
     }
   }
-  if(tile_hit_bottom() || tile_hit_collision()) {
-    if(STATE != 2)
-    {
+
+  if (tile_hit_bottom() || tile_hit_collision()) {
+    if (STATE != 2) {
       add_tile();
     }
     rotation = 0;
@@ -146,5 +147,4 @@ void drop_tile() {
   else {
     ACTIVE.y++;
   }
-  display_grid();
 }

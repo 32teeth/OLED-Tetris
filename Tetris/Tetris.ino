@@ -67,27 +67,61 @@ void setup() {
    */
   board("title");
   board("score");
-  board("next");
-  board("border");
+board("next");
+board("border");
 
-  init_grid();
-  next_tile();
-  add_tile();
+init_grid();
+next_tile();
+add_tile();
 
-  set_pins();
+set_pins();
 }
 
 void loop() {
-  now = millis();
-  if(now - ts >= INTERVAL) {
-    ts = now;
-    if(STATE == 1) {
+  unsigned long now = millis();
+  static unsigned long lastUpdateTime = 0;
+  static const unsigned long updateInterval = 50; // Update display every 50 ms
+
+  if (now - lastUpdateTime >= updateInterval) {
+    lastUpdateTime = now;
+
+    if (STATE == 1) {
       drop_tile();
     }
-    if(STATE == 2) {
+    if (STATE == 2) {
       over_grid();
     }
-    display.display();
+
+    // Optimize display updates
+    bool needsUpdate = false;
+    static byte prevGrid[ROWS][COLUMNS];
+    static byte prevActive = current;
+    static byte prevRotation = rotation;
+    static byte prevActiveX = ACTIVE.x;
+    static byte prevActiveY = ACTIVE.y;
+
+    for (int y = 0; y < ROWS; y++) {
+      for (int x = 0; x < COLUMNS; x++) {
+        if (GRID[x][y] != prevGrid[x][y]) {
+          needsUpdate = true;
+          break;
+        }
+      }
+      if (needsUpdate) break;
+    }
+
+    if (current != prevActive || rotation != prevRotation || ACTIVE.x != prevActiveX || ACTIVE.y != prevActiveY) {
+      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
+      display_grid();
+      memcpy(prevGrid, GRID, sizeof(GRID));
+      prevActive = current;
+      prevRotation = rotation;
+      prevActiveX = ACTIVE.x;
+      prevActiveY = ACTIVE.y;
+    }
   }
 
   get_pins();
